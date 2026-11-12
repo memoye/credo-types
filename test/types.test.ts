@@ -37,6 +37,17 @@ export const withSplit = {
   splitConfiguration: [{ accountId: "0441234567890", splitType: 0, splitValue: 100, isDefault: 1 }],
 } satisfies InitializeTransactionRequest;
 
+// ✅ Every channel Credo's checkout supports.
+export const allChannels = {
+  amount: 1,
+  email: "a@b.co",
+  channels: ["CARD", "BANK", "USSD", "WALLET", "OPAY", "PAYOUTLET"],
+} satisfies InitializeTransactionRequest;
+
+// ❌ Admin-side processor types aren't checkout channels — Credo rejects them.
+// @ts-expect-error — "POS" isn't a payment channel
+export const posChannel = { amount: 1, email: "a@b.co", channels: ["POS"] } satisfies InitializeTransactionRequest;
+
 // ❌ The 1.x field name.
 // @ts-expect-error — it's `channels`, not `channel`
 export const wrongChannelKey = { amount: 1, email: "a@b.co", channel: ["CARD"] } satisfies InitializeTransactionRequest;
@@ -68,6 +79,15 @@ export const initializeResponse = {
   },
   execTime: 35,
   error: [],
+} satisfies InitializeTransactionResponse;
+
+// ✅ Real validation error — `error` is an object of field → message.
+export const invalidChannel = {
+  status: 400,
+  message: "There was an error with the information you provided. Please review your input and try again.",
+  data: "",
+  execTime: 0,
+  error: { channels: "Channels list contains an invalid/disabled channel!" },
 } satisfies InitializeTransactionResponse;
 
 /* -------------------------------- verify -------------------------------- */
@@ -117,6 +137,10 @@ export function isPaid(res: VerifyTransactionResponse): res is VerifyTransaction
 // ❌ 8 and 11 aren't Credo statuses.
 // @ts-expect-error — not a TransactionStatus
 export const badStatus: TransactionDetails["status"] = 8;
+
+// ❌ channelId is 0–3.
+// @ts-expect-error — not a TransactionChannel
+export const badChannelId: TransactionDetails["channelId"] = 4;
 
 /* --------------------------------- popup -------------------------------- */
 

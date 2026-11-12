@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Breaking
 
-- `channel` renamed to `channels`, and `PaymentChannel` is now `"CARD" | "BANK"` (what the API accepts).
+- `channel` renamed to `channels`. `PaymentChannel` is now the values the API accepts:
+  `"CARD" | "BANK" | "USSD" | "WALLET" | "OPAY" | "PAYOUTLET"` (verified against the sandbox).
 - Removed `FeeBearerEnum`. It was declared as a value but the package ships no JavaScript, so importing it
   crashed at runtime. Use the `FeeBearer` type (`0 | 1`).
 - `channels`, `bearer`, `currency` and `initializeAccount` are now optional — Credo accepts requests without them.
@@ -15,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 - `InitializeTransactionResponse`, `VerifyTransactionResponse`, `TransactionDetails` and the `CredoResponse` envelope.
 - `TransactionStatus` with every documented status code.
+- `TransactionChannel` for `channelId` (`0` gateway, `1` payment link, `2` invoice, `3` POS).
 - Inline popup types: `CredoWidget`, `CredoWidgetOptions`, `CredoWidgetHandler`, `CredoWidgetCallbackResponse`.
 - Webhook types: `WebhookPayload`, `WebhookEvent`, `WebhookTransactionData`.
 - Type tests built from real sandbox payloads (`npm test`).

@@ -14,8 +14,29 @@ export type Currency = "NGN" | "USD";
  */
 export type FeeBearer = 0 | 1;
 
-/** Payment methods to offer at checkout. */
-export type PaymentChannel = "CARD" | "BANK";
+/**
+ * Payment methods to offer at checkout. Credo matches them case-insensitively, and rejects
+ * any channel that isn't enabled for your business ("invalid/disabled channel").
+ *
+ * | Value | Shown to the customer as |
+ * |---|---|
+ * | `"CARD"` | Pay with Card |
+ * | `"BANK"` | Pay with Transfer |
+ * | `"USSD"` | Pay with USSD |
+ * | `"WALLET"` | Pay with PocketMoni |
+ * | `"OPAY"` | Pay with OPay |
+ * | `"PAYOUTLET"` | Pay in Bank Branch (pay a Credo Reference Number at any bank) |
+ */
+export type PaymentChannel = "CARD" | "BANK" | "USSD" | "WALLET" | "OPAY" | "PAYOUTLET";
+
+/**
+ * Where a transaction came from (`channelId` in verify and webhook payloads).
+ * - `0`: Gateway (popup, redirect or API)
+ * - `1`: Payment link
+ * - `2`: Invoice
+ * - `3`: POS
+ */
+export type TransactionChannel = 0 | 1 | 2 | 3;
 
 /** `0` = no, `1` = yes. */
 export type BinaryFlag = 0 | 1;
@@ -142,8 +163,11 @@ export interface CredoResponse<T> {
   /** The payload. An empty string on errors. */
   data: T | "";
   execTime: number;
-  /** An array on success (usually empty); a message string on some errors. */
-  error: string[] | string;
+  /**
+   * Usually an empty array on success. On errors: a message string, or field → message
+   * for validation errors, e.g. `{ channels: "Channels list contains an invalid/disabled channel!" }`.
+   */
+  error: string[] | string | Record<string, string>;
 }
 
 export interface InitializeTransactionData {
@@ -211,7 +235,8 @@ export interface TransactionDetails {
   statusMessage?: string;
   businessName?: string;
   businessCode?: string;
-  channelId?: number;
+  /** Where the transaction came from. See {@link TransactionChannel}. */
+  channelId?: TransactionChannel;
   /** Credo Reference Number. */
   crn?: string;
   customerFirstName?: string;
@@ -316,7 +341,7 @@ export type WebhookEvent =
 export interface WebhookTransactionData extends Omit<TransactionDetails, "metadata"> {
   metadata?: unknown;
   businessCode: string;
-  channelId: number;
+  channelId: TransactionChannel;
   /** e.g. `"MasterCard"`, `"Visa"`. */
   paymentMethodType: string;
   /** e.g. `"Card"`, `"Bank"`. */

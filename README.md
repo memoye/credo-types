@@ -99,15 +99,26 @@ if (event === "transaction.successful") fulfil(data.businessRef);
 ## Gotchas the types encode
 
 - `amount` in requests is in **kobo**; amounts in responses are in **naira**.
-- The field is `channels` (plural), values `"CARD"` / `"BANK"`.
+- The field is `channels` (plural). Leave it out to offer every method enabled for your business:
+
+  | `channels` | Customer sees |
+  | --- | --- |
+  | `"CARD"` | Pay with Card |
+  | `"BANK"` | Pay with Transfer |
+  | `"USSD"` | Pay with USSD |
+  | `"WALLET"` | Pay with PocketMoni |
+  | `"OPAY"` | Pay with OPay |
+  | `"PAYOUTLET"` | Pay in Bank Branch |
+
 - `serviceCode` and `splitConfiguration` can't be sent together.
 - Verify returns your `customFields` as `metadata: [{ insightTag, insightTagValue, insightTagDisplay }]`.
-- Error responses have `data: ""` and `error` as a string.
+- Error responses have `data: ""`; `error` is a string, or an object of field → message for validation errors.
+- `channelId` in verify/webhooks is where the payment came from: `0` gateway, `1` payment link, `2` invoice, `3` POS.
 - The popup's `callBack` payload varies by payment method — every field is optional.
 
 ## Upgrading from 1.x
 
-- `channel` → `channels`, with values `"CARD"` / `"BANK"`.
+- `channel` → `channels`, with values `"CARD"`, `"BANK"`, `"USSD"`, `"WALLET"`, `"OPAY"`, `"PAYOUTLET"`.
 - `FeeBearerEnum` is gone (it crashed at runtime — there's no JavaScript in this package). Use `0` / `1` with the `FeeBearer` type.
 - `CredoPaymentInitializationPayload` still works but is deprecated — use `InitializeTransactionRequest`.
 
