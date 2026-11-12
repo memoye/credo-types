@@ -30,6 +30,22 @@ export type FeeBearer = 0 | 1;
 export type PaymentChannel = "CARD" | "BANK" | "USSD" | "WALLET" | "OPAY" | "PAYOUTLET";
 
 /**
+ * How the customer actually paid (`paymentMethod` on a completed transaction / webhook).
+ * Not the same as {@link PaymentChannel} — that's what you *offer*; this is what was *used*.
+ *
+ * Known values: `"Card"`, `"Bank Transfer"`, `"USSD"`, `"Invoice"`, `"POS"`, `"Payoutlet"`.
+ * Compare case-insensitively — other values (e.g. wallets) may appear.
+ */
+export type PaymentMethod =
+  | "Card"
+  | "Bank Transfer"
+  | "USSD"
+  | "Invoice"
+  | "POS"
+  | "Payoutlet"
+  | (string & {});
+
+/**
  * Where a transaction came from (`channelId` in verify and webhook payloads).
  * - `0`: Gateway (popup, redirect or API)
  * - `1`: Payment link
@@ -344,8 +360,8 @@ export interface WebhookTransactionData extends Omit<TransactionDetails, "metada
   channelId: TransactionChannel;
   /** e.g. `"MasterCard"`, `"Visa"`. */
   paymentMethodType: string;
-  /** e.g. `"Card"`, `"Bank"`. */
-  paymentMethod: string;
+  /** How the customer paid. See {@link PaymentMethod}. */
+  paymentMethod: PaymentMethod;
   customer: {
     customerEmail: string;
     firstName?: string;

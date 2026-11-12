@@ -8,6 +8,7 @@ import type {
   TransactionDetails,
   VerifyTransactionResponse,
   WebhookPayload,
+  PaymentMethod,
 } from "../index";
 
 /* ------------------------------ initialize ------------------------------ */
@@ -198,6 +199,9 @@ export const webhook = {
     customer: { customerEmail: "customer@example.com", firstName: "John", lastName: "Doe", phoneNo: "23470122199999" },
   },
 } satisfies WebhookPayload;
+
+// ✅ Known payment methods autocomplete, but other strings are still allowed.
+export const methods: PaymentMethod[] = ["Card", "Bank Transfer", "USSD", "Invoice", "POS", "Payoutlet", "PocketMoni"];
 
 // ❌ Unknown event.
 // @ts-expect-error — not a WebhookEvent

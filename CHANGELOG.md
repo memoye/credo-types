@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 - `InitializeTransactionResponse`, `VerifyTransactionResponse`, `TransactionDetails` and the `CredoResponse` envelope.
 - `TransactionStatus` with every documented status code.
+- `PaymentMethod` for webhook `paymentMethod` (known values, still open to others).
 - `TransactionChannel` for `channelId` (`0` gateway, `1` payment link, `2` invoice, `3` POS).
 - Inline popup types: `CredoWidget`, `CredoWidgetOptions`, `CredoWidgetHandler`, `CredoWidgetCallbackResponse`.
 - Webhook types: `WebhookPayload`, `WebhookEvent`, `WebhookTransactionData`.

@@ -113,6 +113,8 @@ if (event === "transaction.successful") fulfil(data.businessRef);
 - `serviceCode` and `splitConfiguration` can't be sent together.
 - Verify returns your `customFields` as `metadata: [{ insightTag, insightTagValue, insightTagDisplay }]`.
 - Error responses have `data: ""`; `error` is a string, or an object of field → message for validation errors.
+- `channels` (what you offer) isn't `paymentMethod` (what the customer used — `"Card"`, `"Bank Transfer"`,
+  `"USSD"`, `"Invoice"`, `"POS"`, `"Payoutlet"`, …). Compare `paymentMethod` case-insensitively.
 - `channelId` in verify/webhooks is where the payment came from: `0` gateway, `1` payment link, `2` invoice, `3` POS.
 - The popup's `callBack` payload varies by payment method — every field is optional.
 
