@@ -1,7 +1,7 @@
 {
   "name": "credo-types",
-  "version": "1.0.0",
-  "description": "TypeScript definitions for the Credo payment integration API.",
+  "version": "2.0.0",
+  "description": "TypeScript types for the Credo payment gateway: initialize, verify, inline popup (CredoWidget) and webhooks.",
   "license": "MIT",
   "contributors": [
     {
@@ -9,6 +9,7 @@
       "url": "https://github.com/memoye"
     }
   ],
+  "homepage": "https://github.com/memoye/credo-types#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/memoye/credo-types.git"
@@ -16,21 +17,30 @@
   "bugs": {
     "url": "https://github.com/memoye/credo-types/issues"
   },
-  "types": "index.d.ts",
-  "files": [
-    "index.d.ts"
-  ],
-  "scripts": {
-    "prepare": "npx tsc",
-    "typecheck": "npx tsc --noEmit"
-  },
   "keywords": [
     "credo",
+    "credocentral",
     "payment",
+    "payments",
+    "nigeria",
     "types",
     "typescript"
   ],
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts"
+    }
+  },
+  "files": [
+    "index.d.ts"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "tsc -p .",
+    "prepublishOnly": "npm test"
+  },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.9.3"
   }
 }
